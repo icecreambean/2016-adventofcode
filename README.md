@@ -1,2 +1,2 @@
 # 2016-hackvent-attempt
-Attempting problems off the website: http://hackvent.hacking-lab.com/ because I need more experience.
+Attempting problems off the website: http://adventofcode.com/2016 because I need more programming experience.
