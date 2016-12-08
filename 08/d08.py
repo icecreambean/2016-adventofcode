@@ -8,7 +8,7 @@ if TEST_FILE == 'input_test.txt': # part 1 example test
 else:
     Y_MAX = 6 # the actual question
     X_MAX = 50
-PIXEL_OFF = '.'
+PIXEL_OFF = ' '
 PIXEL_ON = '#'
 screen = [[PIXEL_OFF for i in range(X_MAX)] for j in range(Y_MAX)]
 
