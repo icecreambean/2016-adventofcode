@@ -10,11 +10,17 @@ import re, copy, sys
 # heapq for priority queues
 
 # array(floor id (floor level -1)) of arrays(string id of items)
-floors = [] # why is this global?
 INPUT = 'input_test.txt'
 
+# TODO: BFS is WAY TOO slow (too many combinations)
+# implement A* search using the above heuristic
+# other interesting optimisations to read up on here:
+#https://www.reddit.com/r/adventofcode/comments/5hoia9/2016_day_11_solutions/
+# essentially: grasping the tricks of the logic problem will lead
+# to smarter ways of doing things. (especially pruning)
+
 def main():
-    read_file()
+    floors = read_file(INPUT)
     # bfs: set up 'queues' for the 'state'
     elevator_q = [0] # starts on the 1st floor
     floors_q = [floors] # queue of floors(2d array)
@@ -29,12 +35,13 @@ def main():
         cur_floors = floors_q.pop(0)
         cur_moves = moves_q.pop(0)
         ######################
-        #print_debug(cur_moves, cur_elevator, cur_floors)
+        print_debug(cur_moves, cur_elevator, cur_floors)
         # debug stuff
         debug = False
         a = [['lithium microchip'], [], ['lithium generator', 'hydrogen generator', 'hydrogen microchip'], []]
-        if cur_floors == a:
-            debug = True
+        #a.sort()
+        #if cur_floors == a:
+        #    debug = True
         ######################
         # possible neighbour actions
         level_inc = [-1,1]
@@ -60,6 +67,8 @@ def main():
                     #print("n: '{}'".format(n))
                     next_floors[cur_elevator].remove(n)
                     next_floors[next_elevator].append(n)
+                # sort elements on each floor level for equality chk
+                next_floors = sort_floors(next_floors)
                 # check not a state we have already visited
                 if in_floors_visited(floors_visited, next_moves, next_floors):
                     if debug:
@@ -100,6 +109,12 @@ def main():
             break
 
     # end of main
+
+# IMPORTANT FOR EQUALITY TESTS!!!
+def sort_floors(all_floors):
+    for i in all_floors:
+        i.sort()
+    return all_floors
 
 def in_floors_visited(floors_visited, next_moves, next_floors):
     for t in floors_visited:
@@ -154,8 +169,9 @@ def make_pairs(l):
             pairs.append( (l[i], l[j]) )
     return pairs
 
-def read_file():
-    with open(INPUT) as in_f:
+def read_file(in_f_name):
+    floors = []
+    with open(in_f_name) as in_f:
         # each line lists the floors in order from 1 .. n
         for line in in_f:
             microchip_list = re.findall(r'[a-z\-]+ microchip', line)
@@ -164,6 +180,8 @@ def read_file():
             generator_list = re.findall(r'[a-z\-]+ generator', line)
             # side effect
             floors.append(microchip_list + generator_list)
+    floors = sort_floors(floors)
+    return floors
 
 if __name__ == "__main__":
     main()
