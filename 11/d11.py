@@ -16,6 +16,7 @@ INPUT = 'input_test.txt'
 # implement A* search using the above heuristic
 # other interesting optimisations to read up on here:
 #https://www.reddit.com/r/adventofcode/comments/5hoia9/2016_day_11_solutions/
+#https://www.reddit.com/r/adventofcode/comments/5htco3/help_day_11_trying_to_figure_out_exponential/
 # essentially: grasping the tricks of the logic problem will lead
 # to smarter ways of doing things. (especially pruning)
 
