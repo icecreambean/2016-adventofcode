@@ -25,3 +25,4 @@ M: 3    E: 1
 ['lithium microchip']
 
 ... slow.
+bfs too slow, requires A* search?
