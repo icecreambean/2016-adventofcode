@@ -1,0 +1,96 @@
+**** Neighbour valid: True
+M: 3    E: 1
+[]
+['hydrogen microchip']
+['lithium generator', 'hydrogen generator']
+['lithium microchip']
+--- array: [['lithium microchip'], ['lithium generator', 'hydrogen generator'], ['hydrogen microchip'], []]
+**************************
+**** Neighbour valid: True
+M: 3    E: 3
+['lithium generator', 'hydrogen generator']
+['hydrogen microchip']
+[]
+['lithium microchip']
+--- array: [['lithium microchip'], [], ['hydrogen microchip'], ['lithium generator', 'hydrogen generator']]
+**************************
+**** Neighbour valid: False
+M: 3    E: 1
+[]
+['hydrogen generator']
+['lithium generator', 'hydrogen microchip']
+['lithium microchip']
+--- array: [['lithium microchip'], ['lithium generator', 'hydrogen microchip'], ['hydrogen generator'], []]
+**************************
+**** Neighbour valid: False
+M: 3    E: 3
+['lithium generator', 'hydrogen microchip']
+['hydrogen generator']
+[]
+['lithium microchip']
+--- array: [['lithium microchip'], [], ['hydrogen generator'], ['lithium generator', 'hydrogen microchip']]
+**************************
+**** Neighbour valid: True
+M: 3    E: 1
+[]
+['lithium generator']
+['hydrogen generator', 'hydrogen microchip']
+['lithium microchip']
+--- array: [['lithium microchip'], ['hydrogen generator', 'hydrogen microchip'], ['lithium generator'], []]
+**************************
+**** Neighbour valid: True
+M: 3    E: 3
+['hydrogen generator', 'hydrogen microchip']
+['lithium generator']
+[]
+['lithium microchip']
+--- array: [['lithium microchip'], [], ['lithium generator'], ['hydrogen generator', 'hydrogen microchip']]
+**************************
+**** Neighbour valid: True
+M: 3    E: 1
+[]
+['hydrogen generator', 'hydrogen microchip']
+['lithium generator']
+['lithium microchip']
+--- array: [['lithium microchip'], ['lithium generator'], ['hydrogen generator', 'hydrogen microchip'], []]
+**************************
+**** Neighbour valid: True
+M: 3    E: 3
+['lithium generator']
+['hydrogen generator', 'hydrogen microchip']
+[]
+['lithium microchip']
+--- array: [['lithium microchip'], [], ['hydrogen generator', 'hydrogen microchip'], ['lithium generator']]
+**************************
+**** Neighbour valid: False
+M: 3    E: 1
+[]
+['lithium generator', 'hydrogen microchip']
+['hydrogen generator']
+['lithium microchip']
+--- array: [['lithium microchip'], ['hydrogen generator'], ['lithium generator', 'hydrogen microchip'], []]
+**************************
+**** Neighbour valid: False
+M: 3    E: 3
+['hydrogen generator']
+['lithium generator', 'hydrogen microchip']
+[]
+['lithium microchip']
+--- array: [['lithium microchip'], [], ['lithium generator', 'hydrogen microchip'], ['hydrogen generator']]
+**************************
+**** Neighbour valid: True
+M: 3    E: 1
+[]
+['lithium generator', 'hydrogen generator']
+['hydrogen microchip']
+['lithium microchip']
+--- array: [['lithium microchip'], ['hydrogen microchip'], ['lithium generator', 'hydrogen generator'], []]
+**************************
+**** Neighbour valid: True
+M: 3    E: 3
+['hydrogen microchip']
+['lithium generator', 'hydrogen generator']
+[]
+['lithium microchip']
+--- array: [['lithium microchip'], [], ['lithium generator', 'hydrogen generator'], ['hydrogen microchip']]
+**************************
