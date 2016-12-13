@@ -12,44 +12,41 @@ import re, copy, sys
 # array(floor id (floor level -1)) of arrays(string id of items)
 INPUT = 'input_test.txt'
 
-# TODO: BFS is WAY TOO slow (too many combinations)
-# implement A* search using the above heuristic
-# other interesting optimisations to read up on here:
-#https://www.reddit.com/r/adventofcode/comments/5hoia9/2016_day_11_solutions/
-#https://www.reddit.com/r/adventofcode/comments/5htco3/help_day_11_trying_to_figure_out_exponential/
-# essentially: grasping the tricks of the logic problem will lead
-# to smarter ways of doing things. (especially pruning)
+# optimisations to consider
+#   don't go down if no other items are below you - done
+#   look for equivalent states, not just identical states - done
+#   A* cost function
 
 def main():
     floors = read_file(INPUT)
     # bfs: set up 'queues' for the 'state'
     elevator_q = [0] # starts on the 1st floor
     floors_q = [floors] # queue of floors(2d array)
-    floors_visited = [(0,floors)]
+    moves_q = [0] # moves made
+    floors_visited = [(0,floors)] # (also chk equivalent states)
+
     # constants for floors_visited
     FLOORS_VISITED_ELEVATOR = 0
     FLOORS_VISITED_FLOORS = 1
 
-    moves_q = [0] # moves made
-    while len(elevator_q) > 0:              # BFS
+    while len(elevator_q) > 0:
         cur_elevator = elevator_q.pop(0)
         cur_floors = floors_q.pop(0)
         cur_moves = moves_q.pop(0)
         ######################
-        print_debug(cur_moves, cur_elevator, cur_floors)
+        #print_debug(cur_moves, cur_elevator, cur_floors)
         # debug stuff
         debug = False
-        a = [['lithium microchip'], [], ['lithium generator', 'hydrogen generator', 'hydrogen microchip'], []]
-        #a.sort()
-        #if cur_floors == a:
-        #    debug = True
         ######################
         # possible neighbour actions
         level_inc = [-1,1]
-        if cur_elevator <= 0: # correct level_inc, depending on index
-            level_inc.remove(-1)
         if cur_elevator >= len(cur_floors) -1:
             level_inc.remove(1)
+        if cur_elevator <= 0:
+            level_inc.remove(-1)
+        elif not are_items_below(cur_floors, cur_elevator):
+            # note: optimisation
+            level_inc.remove(-1)
         # get neighbours (tuples of len 1 and 2)
         neighbours = make_pairs(cur_floors[cur_elevator])
         for item in cur_floors[cur_elevator]:
@@ -71,7 +68,8 @@ def main():
                 # sort elements on each floor level for equality chk
                 next_floors = sort_floors(next_floors)
                 # check not a state we have already visited
-                if in_floors_visited(floors_visited, next_moves, next_floors):
+                if is_equivalent_state(floors_visited, \
+                        next_elevator, next_floors):
                     if debug:
                         print("**** Neighbour ALREADY VISITED; valid:", valid)
                         print_debug(next_moves, next_elevator, next_floors)
@@ -111,15 +109,67 @@ def main():
 
     # end of main
 
-# IMPORTANT FOR EQUALITY TESTS!!!
+# used to be important for equality checking
+# not sure if i require it anymore?
 def sort_floors(all_floors):
     for i in all_floors:
         i.sort()
     return all_floors
 
-def in_floors_visited(floors_visited, next_moves, next_floors):
+def are_items_below(all_floors, elevator):
+    for i in range(elevator):
+        if len(all_floors[i]) > 0:
+            return True
+    return False
+
+
+def is_equivalent_state(floors_visited, next_elevator, \
+                            next_floors):
+    next_positions = get_positions(next_floors)
+    for elevator_state, floor_state in floors_visited:
+        if elevator_state != next_elevator:
+            continue
+        state_positions = get_positions(floor_state)
+        # state_positions[material] = {chip, gen}
+        # iterate through next pos, if the two lists match, remove and continue TODO TODO TODO TODO
+        next_positions_copy = copy.deepcopy(next_positions)
+        for state_material in list(state_positions.keys()):
+            for next_material in list(next_positions_copy.keys()):
+                # comparing equality of arrays, ignoring
+                # name of the material
+                if state_positions[state_material] == \
+                        next_positions_copy[next_material]:
+                    del state_positions[state_material]
+                    del next_positions_copy[next_material]
+                    break
+        if not state_positions and not next_positions_copy:
+            # equivalent state
+            return True
+    # no equivalent state found
+    return False
+
+
+
+def get_positions(all_floors):
+    positions = {}
+    for level_no, level in enumerate(all_floors):
+        for item in level:
+            item = item.split()
+            material = item[0]
+            machine_type = item[1]
+            if material not in positions:
+                positions[material] = {'microchip':[],'generator':[]}
+            positions[material][machine_type].append(level_no)
+    for k in positions: # note: keys not in sorted order
+        for kk in positions[k]: # chip / gen
+            positions[k][kk].sort()
+    return positions
+
+
+# decrepated - not 'GOOD' enough; see is_equivalent_state()
+def in_floors_visited(floors_visited, next_elevator, next_floors):
     for t in floors_visited:
-        if (next_moves,next_floors) == t:
+        if (next_elevator,next_floors) == t:
             return True
     return False
 
@@ -197,6 +247,14 @@ if __name__ == "__main__":
 # always stops on each floor (can causes items to irradiate one another)
 #    (ie. can't "skip" floors)
 
+###############################################################
 
 # game state search algorithms: bfs, dfs, A*
 # https://en.wikipedia.org/wiki/Zobrist_hashing
+
+
+# links to learn off:
+#https://www.reddit.com/r/adventofcode/comments/5hoia9/2016_day_11_solutions/
+#https://www.reddit.com/r/adventofcode/comments/5htco3/help_day_11_trying_to_figure_out_exponential/
+# essentially: grasping the tricks of the logic problem will lead
+# to smarter ways of doing things. (especially pruning)
