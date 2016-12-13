@@ -6,11 +6,11 @@
 #    * max distances moving these item (pairs) to the 4th floor
 #    (should always be an underestimate, but how to prove?)
 
-import re, copy, sys
+import re, copy, sys, heapq, math
 # heapq for priority queues
 
 # array(floor id (floor level -1)) of arrays(string id of items)
-INPUT = 'input_test.txt'
+INPUT = 'input.txt'
 
 # optimisations to consider
 #   don't go down if no other items are below you - done
@@ -19,7 +19,14 @@ INPUT = 'input_test.txt'
 
 def main():
     floors = read_file(INPUT)
-    # bfs: set up 'queues' for the 'state'
+    # bfs: set up 'PRIORITY queues' for the 'state'
+    # heapq: each element is a tuple, 1st element is compare val
+    # (= f-cost)
+
+    #calc_h_cost(all_floors)
+
+    # TODO: modify the queue, but first write the h-cost func
+
     elevator_q = [0] # starts on the 1st floor
     floors_q = [floors] # queue of floors(2d array)
     moves_q = [0] # moves made
@@ -66,7 +73,7 @@ def main():
                     next_floors[cur_elevator].remove(n)
                     next_floors[next_elevator].append(n)
                 # sort elements on each floor level for equality chk
-                next_floors = sort_floors(next_floors)
+                #next_floors = sort_floors(next_floors)
                 # check not a state we have already visited
                 if is_equivalent_state(floors_visited, \
                         next_elevator, next_floors):
@@ -106,11 +113,21 @@ def main():
             break
         if debug:
             break
-
     # end of main
 
+# reddit alternative: take the average distance from the top floor.
+# is this a good option? :o
+
+def calc_h_cost(all_floors):
+    all_dist = []
+    for index, item_list in enumerate(all_floors):
+        distance = len(all_floors) - index -1
+        all_dist.append( [distance] * len(item_list) )
+    all_dist.sort(reverse=True)
+    return sum(all_dist[: math.ceil( len(all_dist)/2 ) ])
+
 # used to be important for equality checking
-# not sure if i require it anymore?
+# most likely don't require this anymore
 def sort_floors(all_floors):
     for i in all_floors:
         i.sort()
@@ -231,7 +248,7 @@ def read_file(in_f_name):
             generator_list = re.findall(r'[a-z\-]+ generator', line)
             # side effect
             floors.append(microchip_list + generator_list)
-    floors = sort_floors(floors)
+    #floors = sort_floors(floors)
     return floors
 
 if __name__ == "__main__":
