@@ -1,4 +1,7 @@
 #!/usr/bin/env python3.5
+# as of 23:19, 14/12/16:
+#   incomplete: code is too slow; might need major restructuring.
+#   logic seems correct though (too many mallocs, etc.?)
 
 # brute force method: move combinations of things to adjacent floors (bfs)
 # could add a heuristic:
