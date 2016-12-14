@@ -15,31 +15,39 @@ INPUT = 'input.txt'
 # optimisations to consider
 #   don't go down if no other items are below you - done
 #   look for equivalent states, not just identical states - done
-#   A* cost function
+#   A* cost function - done
+
+# needs further pruning??
+# https://andars.github.io/aoc_day11.html ~  to compare ideas
+#    my performance is probably slow as due to infinite mallocs
 
 def main():
     floors = read_file(INPUT)
     # bfs: set up 'PRIORITY queues' for the 'state'
     # heapq: each element is a tuple, 1st element is compare val
     # (= f-cost)
-
-    #calc_h_cost(all_floors)
-
-    # TODO: modify the queue, but first write the h-cost func
-
-    elevator_q = [0] # starts on the 1st floor
-    floors_q = [floors] # queue of floors(2d array)
-    moves_q = [0] # moves made
+    initial_fcost = calc_h_cost(floors) # note moves = 0
+    initial_elevator = 0
+    # ** initial_floors = floors
+    initial_moves = 0
+    q = [ (initial_fcost, initial_elevator, \
+            floors, initial_moves) ]
+    #Q_FCOST = 0; Q_ELEVATOR = 1; Q_FLOORS = 2; Q_MOVES = 3
+    #elevator_q = [0] # starts on the 1st floor
+    #floors_q = [floors] # queue of floors(2d array)
+    #moves_q = [0] # moves made
     floors_visited = [(0,floors)] # (also chk equivalent states)
-
     # constants for floors_visited
     FLOORS_VISITED_ELEVATOR = 0
     FLOORS_VISITED_FLOORS = 1
 
-    while len(elevator_q) > 0:
-        cur_elevator = elevator_q.pop(0)
-        cur_floors = floors_q.pop(0)
-        cur_moves = moves_q.pop(0)
+    while len(q) > 0:
+        # note cur_fcost is useless
+        cur_fcost, cur_elevator, cur_floors, cur_moves = \
+            heapq.heappop(q)
+        #cur_elevator = elevator_q.pop(0)
+        #cur_floors = floors_q.pop(0)
+        #cur_moves = moves_q.pop(0)
         ######################
         #print_debug(cur_moves, cur_elevator, cur_floors)
         # debug stuff
@@ -103,9 +111,12 @@ def main():
                     print("No. moves:", next_moves)
                     break
                 # otherwise add to queue (3 queues), visited
-                elevator_q.append(next_elevator)
-                floors_q.append(next_floors)
-                moves_q.append(next_moves)
+                next_fcost = calc_h_cost(next_floors) + next_moves
+                heapq.heappush(q, (next_fcost, next_elevator, \
+                                   next_floors, next_moves) )
+                #elevator_q.append(next_elevator)
+                #floors_q.append(next_floors)
+                #moves_q.append(next_moves)
                 floors_visited.append((next_elevator, next_floors))
             if found == True:
                 break
@@ -118,11 +129,14 @@ def main():
 # reddit alternative: take the average distance from the top floor.
 # is this a good option? :o
 
+# why is my code so long??
+
+# heuristic cost: REMEMBER to add in g-cost to get total f-cost
 def calc_h_cost(all_floors):
     all_dist = []
     for index, item_list in enumerate(all_floors):
         distance = len(all_floors) - index -1
-        all_dist.append( [distance] * len(item_list) )
+        all_dist += [distance] * len(item_list)
     all_dist.sort(reverse=True)
     return sum(all_dist[: math.ceil( len(all_dist)/2 ) ])
 
