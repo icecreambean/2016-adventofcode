@@ -1,0 +1,4 @@
+The first floor contains an abc generator.
+The second floor contains an abc-compatible microchip and a xyz-compatible microchip.
+The third floor contains nothing relevant.
+The fourth floor contains a xyz generator.

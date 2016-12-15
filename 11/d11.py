@@ -9,11 +9,17 @@
 #    * max distances moving these item (pairs) to the 4th floor
 #    (should always be an underestimate, but how to prove?)
 
-import re, copy, sys, heapq, math
+# RESULTS:
+# part 1:
+#    No. moves: 47 - correct
+#    time taken: 367.99784111976624
+#    (probably due to all the mallocs?)
+
+import re, copy, sys, heapq, math, time
 # heapq for priority queues
 
 # array(floor id (floor level -1)) of arrays(string id of items)
-INPUT = 'input.txt'
+INPUT = 'input_p2.txt'
 
 # optimisations to consider
 #   don't go down if no other items are below you - done
@@ -24,7 +30,15 @@ INPUT = 'input.txt'
 # https://andars.github.io/aoc_day11.html ~  to compare ideas
 #    my performance is probably slow as due to infinite mallocs
 
+UNIT_TEST = False
 def main():
+    # place test code here (for unit testing)
+    if UNIT_TEST:
+        test_equivalent_states() # correct
+        return
+
+    start = time.time()
+
     floors = read_file(INPUT)
     # bfs: set up 'PRIORITY queues' for the 'state'
     # heapq: each element is a tuple, 1st element is compare val
@@ -73,6 +87,14 @@ def main():
         found = False
         for n_group in neighbours:
             for inc in level_inc:
+                # optimisation: (2 up, 1 down)
+                if inc == 1: # up
+                    if len(n_group) == 1 and \
+                            len(cur_floors[cur_elevator]) % 2 == 1:
+                        continue
+                else: # down
+                    if len(n_group) == 2:
+                        continue
                 # update the floors state
                 next_elevator = cur_elevator + inc
                 next_floors = copy.deepcopy(cur_floors)
@@ -127,6 +149,7 @@ def main():
             break
         if debug:
             break
+    print('time taken:', time.time() - start)
     # end of main
 
 # reddit alternative: take the average distance from the top floor.
@@ -155,6 +178,24 @@ def are_items_below(all_floors, elevator):
         if len(all_floors[i]) > 0:
             return True
     return False
+
+def test_equivalent_states():       # it is correct
+    #FLOORS_VISITED_ELEVATOR = 0
+    #FLOORS_VISITED_FLOORS = 1
+    # (test using a custom floors_visited[])
+    f1 = read_file('ut1_1.txt')
+    f2 = read_file('ut1_2.txt')
+    f2_elevator = 1
+    floors_visited = [(0,f1)]
+    if not is_equivalent_state(floors_visited, f2_elevator, f2):
+        print("Test 1 correct.")
+    else:
+        print("Test 1 NOT CORRECT <-----")
+    floors_visited = [(1,f1)]
+    if is_equivalent_state(floors_visited, f2_elevator, f2):
+        print("Test 2 correct.")
+    else:
+        print("Test 2 NOT CORRECT <-----")
 
 
 def is_equivalent_state(floors_visited, next_elevator, \
