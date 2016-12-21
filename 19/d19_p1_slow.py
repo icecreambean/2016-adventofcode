@@ -13,7 +13,7 @@ while len(circle) > 1:
     next_i = i +1
     if next_i >= len(circle):
         next_i = 0
-    circle.pop(next_i)
+    circle.pop(next_i)  # use deque instead: doubly linked list
     i += 1 # interesting logic...
     if i >= len(circle):
         i = 0
