@@ -1,0 +1,9 @@
+swap position 4 with position 0 :todo: abcde
+swap letter d with letter b :todo: ebcda
+reverse positions 0 through 4 :todo: edcba
+rotate left 1 step :todo: abcde
+move position 1 to position 4 :todo: bcdea
+move position 3 to position 0 :todo: bdeac
+rotate based on position of letter b :todo: abdec
+rotate based on position of letter d :todo: ecabd
+decab

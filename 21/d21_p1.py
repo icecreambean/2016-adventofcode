@@ -3,10 +3,11 @@ import re
 
 # disgusting code? splicing is very finnicky, and some
 # strange syntax for edge cases? (PART 1)
-# (supposedly works for the required input - would need
-#  a lot more testing)
+# ((don't like this code - written all at once without
+#   any vigourous testing...))
+# ** though since part 2 works, part 1 probably mostly correct
 
-TEST = False
+TEST = True
 
 if TEST:
     pw = 'abcde'

@@ -1,0 +1,9 @@
+rotate based on position of letter d :len: 5 decab
+rotate based on position of letter b :len: 5 ecabd
+move position 3 to position 0 :len: 5 abdec
+move position 1 to position 4 :len: 5 bdeac
+rotate left 1 step :len: 5 bcdea
+reverse positions 0 through 4 :len: 5 abcde
+swap letter d with letter b :len: 5 edcba
+swap position 4 with position 0 :len: 5 ebcda
+abcde
