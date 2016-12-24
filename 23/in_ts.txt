@@ -1,0 +1,7 @@
+cpy 15 c
+inc a
+inc b
+inc a
+dec a
+dec c
+jnz c -5
